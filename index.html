@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chane Barber</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- reCAPTCHA v3: reemplaza TU_SITE_KEY con tu clave pública de console.cloud.google.com/apis -->
+    <script src="https://www.google.com/recaptcha/api.js?render=TU_SITE_KEY" async defer></script>
+
+    <style>
+        :root {
+            --bg-color: #050505;
+            --container-bg: #111111;
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --accent: #ffffff;
+            --border-color: #2e2e2e;
+            --hover-bg: #1a1a1a;
+            --selected-bg: #ffffff;
+            --selected-text: #000000;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+
+        /* --- VISTA DE INICIO --- */
+        #home-view {
+            width: 100%;
+            transition: opacity 0.5s ease;
+        }
+
+        /* --- LANDING PAGE --- */
+        #landing-page {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
+            scroll-snap-align: start;
+            background:
+                linear-gradient(rgba(5, 5, 5, 0.72), rgba(5, 5, 5, 0.72)),
+                url('frames/frame_0001.webp');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 100;
+        }
+
+        /* Logo monograma CB */
+        .cb-logo {
+            width: 72px;
+            height: 72px;
+            border: 2px solid rgba(255, 255, 255, 0.75);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 28px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--text-main);
+        }
+
+        .landing-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem;
+            letter-spacing: 10px;
+            margin: 0;
+            font-weight: 400;
+            text-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .landing-subtitle {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            margin-top: 10px;
+            margin-bottom: 12px;
+        }
+
+        .landing-tagline {
+            color: rgba(255, 255, 255, 0.35);
+            font-size: 0.75rem;
+            font-style: italic;
+            letter-spacing: 2px;
+            margin-bottom: 48px;
+        }
+
+        .btn-entrar {
+            padding: 16px 48px;
+            background-color: transparent;
+            color: var(--accent);
+            border: 1.5px solid rgba(255, 255, 255, 0.7);
+            border-radius: 3px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-entrar:hover,
+        .btn-entrar:active {
+            background-color: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+            transform: scale(0.98);
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            opacity: 0.45;
+            transition: opacity 0.3s ease;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .scroll-indicator:hover { opacity: 0.9; }
+
+        .scroll-text {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 12px;
+        }
+
+        .arrow-down {
+            width: 10px;
+            height: 10px;
+            border-bottom: 1.5px solid var(--text-main);
+            border-right: 1.5px solid var(--text-main);
+            transform: rotate(45deg);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) rotate(45deg); }
+            40% { transform: translateY(-8px) rotate(45deg); }
+            60% { transform: translateY(-4px) rotate(45deg); }
+        }
+
+        /* --- SECCIÓN INFO --- */
+        #info-section {
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            scroll-snap-align: start;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .info-section-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        .info-container {
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .info-card {
+            background-color: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 2px;
+            padding: 36px 24px;
+            flex: 1;
+            min-width: 260px;
+            transition: transform 0.4s ease, background-color 0.4s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            background-color: #161616;
+        }
+
+        .info-icon {
+            font-size: 1.5rem;
+            margin-bottom: 18px;
+            color: var(--text-main);
+            opacity: 0.7;
+        }
+
+        .info-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.8rem;
+            margin-top: 0;
+            margin-bottom: 18px;
+            letter-spacing: 4px;
+            font-weight: 400;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .info-card p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+
+        .info-card a {
+            color: var(--text-main);
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+            border-bottom: 1px solid transparent;
+            padding-bottom: 2px;
+        }
+
+        .info-card a:hover {
+            border-bottom: 1px solid var(--text-main);
+        }
+
+        .horario-grid {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 6px 16px;
+            text-align: left;
+            margin: 0 auto;
+            width: fit-content;
+        }
+
+        .horario-grid span {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            font-weight: 300;
+        }
+
+        .horario-grid span.dia {
+            color: rgba(255,255,255,0.55);
+        }
+
+        /* --- SECCIÓN RESERVAS --- */
+        #booking-section {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding: 20px;
+            animation: fadeIn 0.8s forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .booking-container {
+            background-color: var(--container-bg);
+            width: 100%;
+            max-width: 500px;
+            padding: 44px 32px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 38px;
+        }
+
+        .header .cb-logo-small {
+            width: 44px;
+            height: 44px;
+            border: 1.5px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px auto;
+            font-family: 'Playfair Display', serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+        }
+
+        .header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            letter-spacing: 3px;
+            margin: 0 0 6px 0;
+            font-weight: 400;
+        }
+
+        .header p {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .divider {
+            width: 40px;
+            height: 1px;
+            background: var(--border-color);
+            margin: 22px auto;
+        }
+
+        .form-group { margin-bottom: 26px; }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 12px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            color: #dddddd;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        input[type="email"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 14px 15px;
+            background-color: #141414;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 3px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: rgba(255,255,255,0.5);
+            background-color: #1c1c1c;
+        }
+
+        ::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .time-slot {
+            padding: 14px 5px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 400;
+            font-size: 14px;
+            letter-spacing: 1px;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            color: var(--text-muted);
+        }
+
+        .time-slot:hover { background-color: var(--hover-bg); color: var(--text-main); }
+
+        .time-slot.selected {
+            background-color: var(--selected-bg);
+            color: var(--selected-text);
+            border-color: var(--selected-bg);
+            font-weight: 600;
+        }
+
+        .time-slot.disabled {
+            opacity: 0.2;
+            cursor: not-allowed;
+            text-decoration: line-through;
+            pointer-events: none;
+        }
+
+        /* --- SELECTOR DE PELUQUERO --- */
+        .barber-slots {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .barber-slot {
+            padding: 16px 8px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .barber-slot:hover { background-color: var(--hover-bg); }
+
+        .barber-slot.selected {
+            background-color: var(--selected-bg);
+            border-color: var(--selected-bg);
+        }
+
+        .barber-slot .barber-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            display: block;
+            margin-bottom: 4px;
+            transition: color 0.2s;
+        }
+
+        .barber-slot .barber-sub {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            display: block;
+            transition: color 0.2s;
+        }
+
+        .barber-slot.selected .barber-name,
+        .barber-slot.selected .barber-sub {
+            color: var(--selected-text);
+        }
+
+        @media (max-width: 380px) {
+            .barber-slots { grid-template-columns: 1fr; }
+        }
+
+        /* --- OVERLAY DE VÍDEO INTRO --- */
+        #video-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            background: #050505;
+        }
+
+        #intro-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #video-dark {
+            position: absolute;
+            inset: 0;
+            background: #050505;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.4s ease;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 17px;
+            margin-top: 12px;
+            background-color: var(--accent);
+            color: #000;
+            border: none;
+            border-radius: 3px;
+            font-family: 'Playfair Display', serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            cursor: pointer;
+            transition: opacity 0.2s ease, transform 0.1s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn-submit:active {
+            transform: scale(0.97);
+            opacity: 0.8;
+        }
+
+        .btn-volver {
+            display: block;
+            width: 100%;
+            padding: 13px;
+            margin-top: 12px;
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-volver:hover {
+            color: var(--text-main);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        @media (max-width: 600px) {
+            .landing-title { font-size: 2.8rem; letter-spacing: 6px; }
+
+            #booking-section {
+                padding: 0;
+                align-items: flex-start;
+                background-color: var(--container-bg);
+            }
+            .booking-container {
+                border: none;
+                box-shadow: none;
+                border-radius: 0;
+                padding: 32px 20px 44px 20px;
+                display: flex;
+                flex-direction: column;
+            }
+            form { display: flex; flex-direction: column; flex-grow: 1; }
+            .btn-submit { margin-top: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- OVERLAY DE VÍDEO (cubre la pantalla durante la transición) -->
+    <div id="video-overlay">
+        <video id="intro-video" muted playsinline preload="auto">
+            <source src="chanebarber.mp4" type="video/mp4">
+        </video>
+        <div id="video-dark"></div>
+    </div>
+
+    <!-- VISTA DE INICIO -->
+    <div id="home-view">
+
+        <!-- LANDING PAGE -->
+        <div id="landing-page">
+            <div class="cb-logo">CB</div>
+            <h1 class="landing-title">CHANE BARBER</h1>
+            <p class="landing-subtitle">Corte de Caballero</p>
+            <p class="landing-tagline">Donde consigues la mejor atención</p>
+            <button id="btn-entrar" class="btn-entrar">Reservar Cita</button>
+
+            <a href="#info-section" class="scroll-indicator">
+                <div class="scroll-text">Descubre más</div>
+                <div class="arrow-down"></div>
+            </a>
+        </div>
+
+        <!-- SECCIÓN INFO -->
+        <div id="info-section">
+            <p class="info-section-label">Encuéntranos</p>
+            <div class="info-container">
+
+                <div class="info-card">
+                    <div class="info-icon">📍</div>
+                    <h3>Ubicación</h3>
+                    <p>C/ de la Peluquería, 1<br>España</p>
+                    <p style="margin-top: 20px;">
+                        <a href="https://maps.google.com" target="_blank">Abrir en Google Maps</a>
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">🕐</div>
+                    <h3>Horario</h3>
+                    <div class="horario-grid">
+                        <span class="dia">Lun – Vie</span><span>09:00 – 14:00 · 16:00 – 20:00</span>
+                        <span class="dia">Sábado</span><span>09:00 – 14:00</span>
+                        <span class="dia">Domingo</span><span>Cerrado</span>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">📞</div>
+                    <h3>Contacto</h3>
+                    <p>Teléfono: <a href="tel:+34000000000">+34 000 000 000</a></p>
+                    <p>Email: <a href="mailto:info@chanebarber.com">info@chanebarber.com</a></p>
+                    <p style="margin-top: 20px;">
+                        <a href="#" target="_blank">Síguenos en Instagram</a>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN RESERVAS -->
+    <div id="booking-section">
+        <div class="booking-container">
+            <div class="header">
+                <div class="cb-logo-small">CB</div>
+                <h2>Elige tu momento</h2>
+                <p>Chane Barber</p>
+                <div class="divider"></div>
+            </div>
+
+            <form id="bookingForm">
+
+                <div class="form-group">
+                    <label for="servicio">Servicio</label>
+                    <div style="position: relative;">
+                        <select id="servicio" required>
+                            <option value="" disabled selected>Selecciona un servicio...</option>
+                            <option value="corte">Corte Clásico</option>
+                            <option value="corte_barba">Corte + Arreglo de Barba</option>
+                            <option value="perfilado">Perfilado de Barba</option>
+                            <option value="degradado">Degradado (Fade)</option>
+                            <option value="afeitado">Afeitado Clásico con Navaja</option>
+                        </select>
+                        <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:11px;color:#666;">▼</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Peluquero</label>
+                    <div class="barber-slots" id="barberSlots">
+                        <div class="barber-slot" data-barber="barber1">
+                            <span class="barber-name">Barber 1</span>
+                            <span class="barber-sub">Especialista</span>
+                        </div>
+                        <div class="barber-slot" data-barber="barber2">
+                            <span class="barber-name">Barber 2</span>
+                            <span class="barber-sub">Especialista</span>
+                        </div>
+                        <div class="barber-slot" data-barber="any">
+                            <span class="barber-name">Sin preferencia</span>
+                            <span class="barber-sub">Cualquiera</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="peluqueroSeleccionado">
+                </div>
+
+                <div class="form-group">
+                    <label for="fecha">Día de la cita</label>
+                    <input type="date" id="fecha" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Hora disponible</label>
+                    <div class="time-slots" id="timeSlots">
+                        <div class="time-slot" data-time="09:00">09:00</div>
+                        <div class="time-slot" data-time="09:45">09:45</div>
+                        <div class="time-slot" data-time="10:30">10:30</div>
+                        <div class="time-slot" data-time="11:15">11:15</div>
+                        <div class="time-slot" data-time="12:00">12:00</div>
+                        <div class="time-slot" data-time="16:00">16:00</div>
+                        <div class="time-slot" data-time="16:45">16:45</div>
+                        <div class="time-slot" data-time="17:30">17:30</div>
+                        <div class="time-slot" data-time="18:15">18:15</div>
+                    </div>
+                    <input type="hidden" id="horaSeleccionada" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="nombre">Tus Datos</label>
+                    <input type="text" id="nombre" placeholder="Nombre completo"
+                        style="margin-bottom:10px;" required minlength="3"
+                        title="Introduce tu nombre (mínimo 3 caracteres)">
+                    <input type="email" id="email" placeholder="Correo electrónico"
+                        style="margin-bottom:10px;" required
+                        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                        title="Introduce un correo válido">
+                    <input type="tel" id="telefono" placeholder="Teléfono de contacto"
+                        required pattern="\+?[0-9]{9,15}"
+                        title="Introduce un teléfono válido (mínimo 9 dígitos)">
+                </div>
+
+                <!-- Honeypot: campo invisible para humanos, visible para bots -->
+                <div style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+                    <input type="text" id="hp_website" name="website" tabindex="-1" autocomplete="off" focusable="false">
+                </div>
+
+                <button type="submit" class="btn-submit">Confirmar Reserva</button>
+                <button type="button" class="btn-volver" id="btn-volver">← Volver</button>
+
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // --- TRANSICIÓN HOME ↔ RESERVAS ---
+        const btnEntrar      = document.getElementById('btn-entrar');
+        const btnVolver      = document.getElementById('btn-volver');
+        const homeView       = document.getElementById('home-view');
+        const bookingSection = document.getElementById('booking-section');
+
+        const videoOverlay = document.getElementById('video-overlay');
+        const introVideo   = document.getElementById('intro-video');
+        const videoDark    = document.getElementById('video-dark');
+
+        function showHome() {
+            bookingSection.style.display = 'none';
+            homeView.style.display = 'block';
+            setTimeout(() => {
+                homeView.style.opacity = '1';
+                window.scrollTo(0, 0);
+            }, 10);
+        }
+
+        // Muestra el formulario directamente (usado desde popstate / botón volver)
+        function showBooking() {
+            homeView.style.opacity = '0';
+            homeView.style.display = 'none';
+            bookingSection.style.display = 'flex';
+            window.scrollTo(0, 0);
+        }
+
+        // Reproduce el vídeo intro y al terminar muestra el formulario
+        function playIntroAndShowBooking() {
+            bookingOpenTime = Date.now();
+            videoDark.style.transition = 'none';
+            videoDark.style.opacity    = '0';
+            videoOverlay.style.display = 'block';
+            introVideo.currentTime     = 0;
+            introVideo.play();
+
+            introVideo.addEventListener('ended', function () {
+                introVideo.pause();
+                // Breve pausa en el último frame antes de oscurecer
+                setTimeout(() => {
+                    videoDark.style.transition = 'opacity 1.4s ease';
+                    videoDark.style.opacity    = '1';
+                    // Cuando el fade termina, mostrar el formulario
+                    setTimeout(() => {
+                        videoOverlay.style.display = 'none';
+                        videoDark.style.opacity    = '0';
+                        showBooking();
+                    }, 1400);
+                }, 350);
+            }, { once: true });
+        }
+
+        // Clave pública reCAPTCHA v3 — reemplaza TU_SITE_KEY
+        const RECAPTCHA_SITE_KEY = 'TU_SITE_KEY';
+
+        // Marca de tiempo: cuándo se abrió el formulario de reservas
+        let bookingOpenTime = null;
+
+        // Estado inicial en el historial (home)
+        history.replaceState({ view: 'home' }, '', window.location.pathname);
+
+        btnEntrar.addEventListener('click', function () {
+            history.pushState({ view: 'booking' }, '', '#reservar');
+            playIntroAndShowBooking();
+        });
+
+        // El botón "Volver" navega hacia atrás en el historial (dispara popstate)
+        btnVolver.addEventListener('click', function () {
+            history.back();
+        });
+
+        // Interceptar el botón atrás del navegador / móvil
+        window.addEventListener('popstate', function (e) {
+            if (e.state && e.state.view === 'booking') {
+                showBooking();
+            } else {
+                showHome();
+            }
+        });
+
+        // --- FECHA MÍNIMA (hoy local) ---
+        const fechaInput = document.getElementById('fecha');
+        const ahora      = new Date();
+        const hoyLocal   = `${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,'0')}-${String(ahora.getDate()).padStart(2,'0')}`;
+        fechaInput.setAttribute('min', hoyLocal);
+
+        // --- SLOTS DE HORA ---
+        const timeSlots      = document.querySelectorAll('.time-slot');
+        const horaInput      = document.getElementById('horaSeleccionada');
+        const btnSubmit      = document.querySelector('.btn-submit');
+
+        // --- SELECTOR DE PELUQUERO ---
+        const barberSlots      = document.querySelectorAll('.barber-slot');
+        const peluqueroInput   = document.getElementById('peluqueroSeleccionado');
+
+        // URL del Google Apps Script (sustituye por la de Chane Barber)
+        const URL_GOOGLE_SCRIPT = "https://script.google.com/macros/s/AKfycbwaGr_V_-qyDKzzs022b9BssYRAX9jgwAeMPYs8Tt7BU68qVpAJ1QK90MqBkUReSCE/exec";
+
+        // Selección de peluquero
+        barberSlots.forEach(slot => {
+            slot.addEventListener('click', function () {
+                barberSlots.forEach(s => s.classList.remove('selected'));
+                this.classList.add('selected');
+                peluqueroInput.value = this.getAttribute('data-barber');
+
+                // Si ya hay fecha elegida, reconsultar disponibilidad para este peluquero
+                if (fechaInput.value) {
+                    checkAvailability(fechaInput.value, peluqueroInput.value);
+                }
+            });
+        });
+
+        // Selección de hora
+        timeSlots.forEach(slot => {
+            slot.addEventListener('click', function () {
+                if (this.classList.contains('disabled')) return;
+                timeSlots.forEach(s => s.classList.remove('selected'));
+                this.classList.add('selected');
+                horaInput.value = this.getAttribute('data-time');
+            });
+        });
+
+        // Consulta de disponibilidad al backend
+        function checkAvailability(fecha, peluquero) {
+            horaInput.value = '';
+            timeSlots.forEach(s => {
+                s.classList.remove('selected');
+                s.classList.add('disabled');
+            });
+
+            // Si hay peluquero específico lo manda; "any" no filtra
+            let url = URL_GOOGLE_SCRIPT + '?fecha=' + fecha;
+            if (peluquero && peluquero !== 'any') {
+                url += '&peluquero=' + peluquero;
+            }
+
+            fetch(url)
+                .then(r => r.json())
+                .then(data => {
+                    const horasOcupadas   = data.ocupadas || [];
+                    const momentoActual   = new Date();
+                    const minutosActuales = momentoActual.getHours() * 60 + momentoActual.getMinutes();
+
+                    timeSlots.forEach(s => {
+                        const hora = s.getAttribute('data-time');
+                        const [h, m] = hora.split(':').map(Number);
+                        const minutosBoton = h * 60 + m;
+
+                        const ocupadoPorGoogle = horasOcupadas.includes(hora);
+                        const ocupadoPorPasado = (fecha === hoyLocal) && (minutosBoton <= minutosActuales);
+
+                        if (ocupadoPorGoogle || ocupadoPorPasado) {
+                            s.classList.add('disabled');
+                        } else {
+                            s.classList.remove('disabled');
+                        }
+                    });
+                })
+                .catch(() => timeSlots.forEach(s => s.classList.remove('disabled')));
+        }
+
+        fechaInput.addEventListener('change', function () {
+            const fechaElegida = this.value;
+            if (!fechaElegida) return;
+
+            // Si todavía no se eligió peluquero, solo resetear los slots
+            if (!peluqueroInput.value) {
+                horaInput.value = '';
+                timeSlots.forEach(s => { s.classList.remove('selected'); s.classList.add('disabled'); });
+                return;
+            }
+
+            checkAvailability(fechaElegida, peluqueroInput.value);
+        });
+
+        // --- ENVÍO DEL FORMULARIO ---
+        document.getElementById('bookingForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // 1. Honeypot: si este campo tiene valor, es un bot — fallo silencioso
+            if (document.getElementById('hp_website').value) return;
+
+            // 2. Timing: un humano tarda más de 2 segundos en rellenar el formulario
+            if (bookingOpenTime && (Date.now() - bookingOpenTime) < 2000) return;
+
+            // 3. Validaciones de campos
+            if (!peluqueroInput.value) {
+                alert('Por favor, selecciona un peluquero.');
+                return;
+            }
+            if (!horaInput.value) {
+                alert('Por favor, selecciona una hora para tu cita.');
+                return;
+            }
+
+            const textoOriginal     = btnSubmit.innerText;
+            btnSubmit.innerText     = 'Verificando...';
+            btnSubmit.style.opacity = '0.5';
+            btnSubmit.disabled      = true;
+
+            const datosReserva = {
+                servicio  : document.getElementById('servicio').value,
+                peluquero : peluqueroInput.value,
+                fecha     : fechaInput.value,
+                hora      : horaInput.value,
+                nombre    : document.getElementById('nombre').value,
+                email     : document.getElementById('email').value,
+                telefono  : document.getElementById('telefono').value
+            };
+
+            // 4. reCAPTCHA v3: obtener token antes de enviar
+            function enviarReserva(recaptchaToken) {
+                datosReserva.recaptchaToken = recaptchaToken;
+                btnSubmit.innerText = 'Reservando...';
+
+                fetch(URL_GOOGLE_SCRIPT, {
+                    method  : 'POST',
+                    body    : JSON.stringify(datosReserva),
+                    headers : { 'Content-Type': 'text/plain;charset=utf-8' }
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.status === 'exito') {
+                        alert('¡Cita reservada con éxito! Te esperamos en Chane Barber.');
+                        document.getElementById('bookingForm').reset();
+                        timeSlots.forEach(s => s.classList.remove('selected', 'disabled'));
+                        barberSlots.forEach(s => s.classList.remove('selected'));
+                        horaInput.value      = '';
+                        peluqueroInput.value = '';
+
+                        bookingSection.style.display = 'none';
+                        homeView.style.display = 'block';
+                        setTimeout(() => {
+                            homeView.style.opacity = '1';
+                            window.scrollTo(0, 0);
+                        }, 10);
+                    } else if (data.status === 'bot') {
+                        alert('No hemos podido verificar tu solicitud. Inténtalo de nuevo.');
+                    } else {
+                        alert('Hubo un problema al reservar. Inténtalo de nuevo.');
+                    }
+                })
+                .catch(() => alert('Error de conexión. Inténtalo de nuevo.'))
+                .finally(() => {
+                    btnSubmit.innerText     = textoOriginal;
+                    btnSubmit.style.opacity = '1';
+                    btnSubmit.disabled      = false;
+                });
+            }
+
+            // Ejecutar reCAPTCHA y luego enviar
+            if (typeof grecaptcha !== 'undefined' && RECAPTCHA_SITE_KEY !== 'TU_SITE_KEY') {
+                grecaptcha.ready(function () {
+                    grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'reservar' })
+                        .then(enviarReserva)
+                        .catch(() => enviarReserva(''));
+                });
+            } else {
+                // Sin reCAPTCHA configurado: enviar igualmente (modo desarrollo)
+                enviarReserva('');
+            }
+        });
+    </script>
+
+</body>
+</html>
