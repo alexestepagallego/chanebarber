@@ -575,7 +575,7 @@
 
     <!-- OVERLAY DE VÍDEO (cubre la pantalla durante la transición) -->
     <div id="video-overlay">
-        <video id="intro-video" muted playsinline preload="auto" src="chanebarber_web.mp4"></video>
+        <video id="intro-video" muted playsinline preload="none"></video>
         <div id="video-dark"></div>
     </div>
 
@@ -1017,6 +1017,18 @@
                 enviarReserva('');
             }
         });
+        // Precargar el vídeo como blob: fetch() no está bloqueado en móvil como sí lo está preload="auto"
+        fetch('chanebarber_web.mp4')
+            .then(r => r.blob())
+            .then(blob => {
+                introVideo.src = URL.createObjectURL(blob);
+                introVideo.load();
+            })
+            .catch(() => {
+                // Si el fetch falla, asignar src directamente como fallback
+                introVideo.src = 'chanebarber_web.mp4';
+            });
+
     </script>
 
 </body>
