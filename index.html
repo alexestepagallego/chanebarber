@@ -575,8 +575,7 @@
 
     <!-- OVERLAY DE VÍDEO (cubre la pantalla durante la transición) -->
     <div id="video-overlay">
-        <!-- src se asigna por JS al pulsar el botón, evitando descarga al cargar la página -->
-        <video id="intro-video" muted playsinline preload="none"></video>
+        <video id="intro-video" muted playsinline preload="auto" src="chanebarber_web.mp4"></video>
         <div id="video-dark"></div>
     </div>
 
@@ -769,21 +768,26 @@
             }
             introVideo.currentTime = 0;
 
-            // Timeout de seguridad: si el vídeo tarda más de 8s en cargar, ir directo al formulario
+            // Si el vídeo ya está listo, reproducir; si no, esperar hasta 5s antes de saltar al formulario
             const fallbackTimer = setTimeout(() => {
+                introVideo.removeEventListener('canplaythrough', onReady);
                 videoOverlay.style.display = 'none';
                 showBooking();
-            }, 8000);
+            }, 5000);
 
-            const playPromise = introVideo.play();
-
-            if (playPromise !== undefined) {
-                playPromise.catch(() => {
-                    // Autoplay bloqueado (raro con muted, pero por si acaso)
-                    clearTimeout(fallbackTimer);
+            function onReady() {
+                clearTimeout(fallbackTimer);
+                introVideo.play().catch(() => {
                     videoOverlay.style.display = 'none';
                     showBooking();
                 });
+            }
+
+            if (introVideo.readyState >= 3) {
+                // Ya está en buffer, reproducir de inmediato
+                onReady();
+            } else {
+                introVideo.addEventListener('canplaythrough', onReady, { once: true });
             }
 
             introVideo.addEventListener('ended', function () {
