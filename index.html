@@ -575,9 +575,8 @@
 
     <!-- OVERLAY DE VÍDEO (cubre la pantalla durante la transición) -->
     <div id="video-overlay">
-        <video id="intro-video" muted playsinline preload="auto">
-            <source src="chanebarber.mp4" type="video/mp4">
-        </video>
+        <!-- src se asigna por JS al pulsar el botón, evitando descarga al cargar la página -->
+        <video id="intro-video" muted playsinline preload="none"></video>
         <div id="video-dark"></div>
     </div>
 
@@ -763,10 +762,32 @@
             videoDark.style.transition = 'none';
             videoDark.style.opacity    = '0';
             videoOverlay.style.display = 'block';
-            introVideo.currentTime     = 0;
-            introVideo.play();
+
+            // Asignar src la primera vez (carga diferida: no descarga hasta aquí)
+            if (!introVideo.src || introVideo.src === window.location.href) {
+                introVideo.src = 'chanebarber_web.mp4';
+            }
+            introVideo.currentTime = 0;
+
+            // Timeout de seguridad: si el vídeo tarda más de 8s en cargar, ir directo al formulario
+            const fallbackTimer = setTimeout(() => {
+                videoOverlay.style.display = 'none';
+                showBooking();
+            }, 8000);
+
+            const playPromise = introVideo.play();
+
+            if (playPromise !== undefined) {
+                playPromise.catch(() => {
+                    // Autoplay bloqueado (raro con muted, pero por si acaso)
+                    clearTimeout(fallbackTimer);
+                    videoOverlay.style.display = 'none';
+                    showBooking();
+                });
+            }
 
             introVideo.addEventListener('ended', function () {
+                clearTimeout(fallbackTimer);
                 introVideo.pause();
                 // Breve pausa en el último frame antes de oscurecer
                 setTimeout(() => {
